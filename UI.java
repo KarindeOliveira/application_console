@@ -1,7 +1,6 @@
 package com.ciandt.feedfront.application;
 
 
-import java.io.IOException;
 
 public class UI {
 
