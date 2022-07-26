@@ -1,93 +1,44 @@
 package com.ciandt.feedfront.application;
 
-import com.ciandt.feedfront.controller.EmployeeController;
-import com.ciandt.feedfront.controller.FeedbackController;
-import com.ciandt.feedfront.excecoes.ArquivoException;
-import com.ciandt.feedfront.excecoes.BusinessException;
-
 import java.util.Scanner;
 
-/**
- * Hello world!
- *
- */
-public class App 
-{
-    public static void main( String[] args ) throws BusinessException, ArquivoException {
-        FeedbackController feedBackController = new FeedbackController();
-        EmployeeController employeeController = new EmployeeController();
-
+public class App {
+    public static void main( String[] args ) {
         Scanner sc = new Scanner(System.in);
-        int opcao;
+        int opcao, opcaoDetalhe = 0;
 
         System.out.println("---------- Seja bem-vindo ao FeedFront! ----------");
 
-        // Menu 1
-        System.out.println("1. Menu Employee");
-        System.out.println("2. Menu Feedback");
+        UI.menuInicial();
         opcao = sc.nextInt();
-        if(opcao ==1){
-            System.out.println("1. Cadastrar");
-            System.out.println("2. Consultar");
-            System.out.println("3. Editar");
-            System.out.println("4. Excluir");
-            System.out.println("Digite sua opção:");
-            opcao = sc.nextInt();
-            switch (opcao) {
-                    case 1:
-                        UI.createEmployee();
-                        System.out.println("Ação concluida");
+
+        while (opcao != 3) {
+            if (opcao == 1 || opcao == 2) {
+                UI.menuDetalhado(opcao);
+                opcaoDetalhe = sc.nextInt();
+                while (opcaoDetalhe != 5) {
+                    if (opcaoDetalhe > 0 && opcaoDetalhe < 6) {
+                        UI.realizarAcao(opcao, opcaoDetalhe);
                         UI.clearScreen();
-                        break;
-                    case 2:
-                        UI.buscarEmployee();
-                        System.out.println("Ação concluida");
-                        UI.clearScreen();
-                        break;
-                    case 3:
-                        // atualizar
-                        break;
-                    case 4:
-                        UI.excluirEmployee();
-                        System.out.println("Ação concluida");
-                        UI.clearScreen();
-                        break;
-                    default:
+                        UI.menuDetalhado(opcao);
+                        opcaoDetalhe = sc.nextInt();
+                    } else {
+                        System.out.println("Opção inválida. Digite novamente");
+                        opcaoDetalhe = sc.nextInt();
+                    }
                 }
-
-        } else if (opcao == 2 ) {
-            System.out.println("1. Cadastrar");
-            System.out.println("2. Consultar");
-            System.out.println("3. Editar");
-            System.out.println("4. Excluir");
-            opcao = sc.nextInt();
-            switch (opcao) {
-                case 1:
-                    UI.createFeedBack();
-                    System.out.println("Ação concluida");
-                    UI.clearScreen();
-                    break;
-                case 2:
-                    UI.buscarFeedBack();
-                    System.out.println("Ação concluida");
-                    UI.clearScreen();
-                    break;
-                case 3:
-                    // atualizar
-                    break;
-                case 4: UI.excluirFeedBack();
-                    System.out.println("Ação concluida");
-                    UI.clearScreen();
-                    break;
-                default:
+                opcao = 0;
+            } else {
+                if (opcaoDetalhe == 5) {
+                    UI.menuInicial();
+                    opcaoDetalhe = 0;
+                } else  {
+                    System.out.println("Opção inválida. Digite novamente");
+                }
+                opcao = sc.nextInt();
             }
-        } else {
-
-            System.out.println("Opção inválida. Digite novamente");
-            opcao = sc.nextInt();
-
-
-            sc.close();
         }
+
+        sc.close();
     }}
 
