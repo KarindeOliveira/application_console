@@ -5,8 +5,8 @@ import java.util.Scanner;
 public class App {
     public static void main( String[] args ) {
         Scanner sc = new Scanner(System.in);
-        int opcao, opcaoDetalhe = 0;
-
+        int opcao, opcaoDetalhe = 0, maxOpcoes;
+        boolean loopDetalhe = true;
         System.out.println("---------- Seja bem-vindo ao FeedFront! ----------");
 
         UI.menuInicial();
@@ -14,14 +14,21 @@ public class App {
 
         while (opcao != 3) {
             if (opcao == 1 || opcao == 2) {
+                if (opcao == 1) {
+                    maxOpcoes = 7;
+                } else {
+                    maxOpcoes = 5;
+                }
                 UI.menuDetalhado(opcao);
                 opcaoDetalhe = sc.nextInt();
-                while (opcaoDetalhe != 6) {
-                    if (opcaoDetalhe > 0 && opcaoDetalhe < 7) {
-                        UI.realizarAcao(opcao, opcaoDetalhe);
+                while (loopDetalhe) {
+                    if (opcaoDetalhe > 0 && opcaoDetalhe < maxOpcoes) {
+                        loopDetalhe = UI.realizarAcao(opcao, opcaoDetalhe);
                         UI.clearScreen();
-                        UI.menuDetalhado(opcao);
-                        opcaoDetalhe = sc.nextInt();
+                        if (loopDetalhe) {
+                            UI.menuDetalhado(opcao);
+                            opcaoDetalhe = sc.nextInt();
+                        }
                     } else {
                         System.out.println("Opção inválida. Digite novamente");
                         opcaoDetalhe = sc.nextInt();
@@ -29,9 +36,9 @@ public class App {
                 }
                 opcao = 0;
             } else {
-                if (opcaoDetalhe == 6) {
+                if (!loopDetalhe) {
                     UI.menuInicial();
-                    opcaoDetalhe = 0;
+                    loopDetalhe = true;
                 } else  {
                     System.out.println("Opção inválida. Digite novamente");
                 }

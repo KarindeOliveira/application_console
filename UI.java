@@ -14,20 +14,23 @@ public class UI {
     }
 
     public static void menuDetalhado(int opcao) {
+        int i = 1;
         if (opcao == 1) {
             System.out.println("---------- Menu Employee ----------");
         } else {
             System.out.println("---------- Menu Feedback ----------");
         }
-        System.out.println("1. Listar registros");
-        System.out.println("2. Cadastrar");
-        System.out.println("3. Consultar");
-        System.out.println("4. Editar");
-        System.out.println("5. Excluir");
-        System.out.println("6. Voltar ao menu anterior");
+        System.out.printf("%d. Listar registros%n", i++);
+        System.out.printf("%d. Cadastrar%n", i++);
+        System.out.printf("%d. Consultar%n", i++);
+        if (opcao == 1) {
+            System.out.printf("%d. Editar%n", i++);
+            System.out.printf("%d. Excluir%n", i++);
+        }
+        System.out.printf("%d. Voltar ao menu anterior%n", i++);
     }
 
-    public static void realizarAcao(int opcao, int opcaoDetalhe) {
+    public static boolean realizarAcao(int opcao, int opcaoDetalhe) {
         switch (opcaoDetalhe) {
             case 1:
                 if (opcao == 1) {
@@ -39,7 +42,7 @@ public class UI {
                 }
                 System.out.println("---------- Ação concluida ----------");
                 clearScreen();
-                break;
+                return true;
             case 2:
                 if (opcao == 1) {
                     System.out.println("---------- Cadastrar Employee ----------");
@@ -50,7 +53,7 @@ public class UI {
                 }
                 System.out.println("---------- Ação concluida ----------");
                 clearScreen();
-                break;
+                return true;
             case 3:
                 if (opcao == 1) {
                     System.out.println("---------- Consultar Employee ----------");
@@ -61,30 +64,29 @@ public class UI {
                 }
                 System.out.println("---------- Ação concluida ----------");
                 clearScreen();
-                break;
+                return true;
             case 4:
                 if (opcao == 1) {
                     System.out.println("---------- Editar Employee ----------");
                     UIEmployee.editarEmployee();
                 } else {
-                    System.out.println("---------- Editar Feedback ----------");
-                    UIFeedback.editarFeedback();
+                    return false;
                 }
                 System.out.println("---------- Ação concluida ----------");
                 clearScreen();
-                break;
+                return true;
             case 5:
                 if (opcao == 1) {
                     System.out.println("---------- Excluir Employee ----------");
                     UIEmployee.excluirEmployee();
                 } else {
-                    System.out.println("---------- Excluir Feedback ----------");
-                    UIFeedback.excluirFeedback();
+                    return true;
                 }
                 System.out.println("---------- Ação concluida ----------");
                 clearScreen();
-                break;
+                return true;
             default:
+                return false;
         }
     }
 }

@@ -1,8 +1,12 @@
 package com.ciandt.feedfront.application;
 
 
+import com.ciandt.feedfront.controller.EmployeeController;
 import com.ciandt.feedfront.controller.FeedbackController;
+import com.ciandt.feedfront.excecoes.ArquivoException;
+import com.ciandt.feedfront.excecoes.BusinessException;
 import com.ciandt.feedfront.excecoes.ComprimentoInvalidoException;
+import com.ciandt.feedfront.models.Employee;
 import com.ciandt.feedfront.models.Feedback;
 
 import java.time.LocalDate;
@@ -12,16 +16,34 @@ import java.util.Scanner;
 public class UIFeedback {
 
     public static void cadastrarFeedBack() {
-        long autor, proprietario;
+        String idAutor, idProprietario;
+        Employee autor, proprietario;
         String descricao, oqueMelhora, comoMelhora;
         LocalDate data = LocalDate.now();
         FeedbackController feedBackController = new FeedbackController();
+        EmployeeController employeeController = new EmployeeController();
 
         Scanner sc = new Scanner(System.in);
         System.out.println("Digite o ID do Employee autor:");
-        autor = Integer.parseInt(sc.nextLine());
+        idAutor = sc.nextLine();
+
+        try {
+            autor = employeeController.buscar(idAutor);
+        } catch (Exception e) {
+            System.out.println("Não foi possível encontrar o Employee informado");
+            return;
+        }
+
         System.out.println("Digite o ID do Employee que receberá o Feedback:");
-        proprietario = Integer.parseInt(sc.nextLine());
+        idProprietario = sc.nextLine();
+
+        try {
+            proprietario = employeeController.buscar(idProprietario);
+        } catch (Exception e) {
+            System.out.println("Não foi possível encontrar o Employee informado");
+            return;
+        }
+
         System.out.println("Digite a descrição do Feedback:");
         descricao = sc.nextLine();
         System.out.println("Digite pontos em que você acha o Employee pode melhorar:");
@@ -29,8 +51,10 @@ public class UIFeedback {
         System.out.println("Digite sugestões do que Employee pode fazer para melhorar:");
         comoMelhora = sc.nextLine();
 
+
+
         try {
-//            feedBackController.salvar(new Feedback(data, autor, proprietario, descricao, oqueMelhora, comoMelhora));
+            feedBackController.salvar(new Feedback(data, autor, proprietario, descricao, oqueMelhora, comoMelhora));
         } catch (Exception e) {
             // ToDo: tratar as diferentes exceções
             System.out.println("Não foi possível cadastrar o Feedback");
@@ -58,6 +82,8 @@ public class UIFeedback {
     public static void editarFeedback() {
         FeedbackController feedbackController = new FeedbackController();
         Feedback feedback = consultarFeedback();
+
+        if (feedback == null) return;
 
         int opcao = 0;
         Scanner sc = new Scanner(System.in);
@@ -100,14 +126,16 @@ public class UIFeedback {
             }
         }
 
+        System.out.println(feedback);
+
         try {
             feedbackController.apagar(feedback.getId());
         } catch (Exception e){
-            System.out.println("Não foi possível apagar");
+            System.out.println(e.getMessage());
         }
 
         try {
-            feedbackController.salvar(feedback);
+            feedback = feedbackController.salvar(feedback);
             System.out.println("Feedback salvo: " + feedback.getId());
         } catch (Exception e){
             System.out.println("Não foi possível atualizar");
@@ -121,6 +149,8 @@ public class UIFeedback {
 
         Feedback feedback = consultarFeedback();
 
+        if (feedback == null) return;
+
         System.out.println("Tem certeza que deseja excluir esse registro?");
         System.out.println("1. Confirmar");
         System.out.println("2. Cancelar");
@@ -132,7 +162,7 @@ public class UIFeedback {
                 try {
                     feedBackController.apagar(feedback.getId());
                 } catch (Exception e){
-                    // ToDo: tratar exceções
+                    System.out.println("Não foi possível excluir o Feedback");
                 }
                 opcao = 2;
             } else {

@@ -74,6 +74,8 @@ public class UIEmployee {
 
         Employee employee = consultarEmployee();
 
+        if (employee == null) return;
+
         menuCampoEdicao();
         opcao = Integer.parseInt(sc.nextLine());
 
@@ -135,6 +137,8 @@ public class UIEmployee {
         Scanner sc = new Scanner(System.in);
 
         Employee employee = consultarEmployee();
+
+        if (employee == null) return;
 
         System.out.println("Tem certeza que deseja excluir esse registro?");
         System.out.println("1. Confirmar");
