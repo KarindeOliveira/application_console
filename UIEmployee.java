@@ -1,6 +1,9 @@
 package com.ciandt.feedfront.application;
 
 import com.ciandt.feedfront.controller.EmployeeController;
+import com.ciandt.feedfront.excecoes.ArquivoException;
+import com.ciandt.feedfront.excecoes.BusinessException;
+import com.ciandt.feedfront.excecoes.ComprimentoInvalidoException;
 import com.ciandt.feedfront.models.Employee;
 
 import java.time.LocalDate;
@@ -9,7 +12,6 @@ import java.util.Scanner;
 public class UIEmployee {
 
     public static void cadastrarEmployee() {
-        EmployeeController employeeController = new EmployeeController();
         System.out.println("---------- Cadastrar Employee ----------");
         String nome, sobrenome, email;
         Scanner sc = new Scanner(System.in);
@@ -19,12 +21,25 @@ public class UIEmployee {
         sobrenome = sc.next();
         System.out.println("Entre com o email:");
         email = sc.next();
+
+        EmployeeController employeeController = new EmployeeController();
         Employee salvarNome;
 
         try {
-       salvarNome = employeeController.salvar(new Employee(nome, sobrenome, email));
-        } catch (Exception e) {
+            salvarNome = employeeController.salvar(new Employee(nome, sobrenome, email));
+            System.out.println("Employee salvo: " + salvarNome.getId());
+        } catch (ArquivoException e) {
+            System.out.println("Não foi possível salvar");
             System.out.println(e.getMessage());
+            System.out.println(e.getCause());
+        } catch (ComprimentoInvalidoException e) {
+            System.out.println("Não foi possível salvar");
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause());
+        } catch (BusinessException e) {
+            System.out.println("Não foi possível salvar");
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause());
         }
     }
 
@@ -33,18 +48,23 @@ public class UIEmployee {
         String id;
         Scanner sc = new Scanner(System.in);
         EmployeeController employeeController = new EmployeeController();
-        Employee buscarNome;
+
         System.out.println("Entre com o id:");
         id = sc.next();
+        Employee employee;
         try {
-            buscarNome = employeeController.buscar(id);
-            System.out.println(buscarNome.toString());
 
-
-        } catch (Exception e) {
+            employee = employeeController.buscar(id);
+            System.out.println(employee);
+        } catch (BusinessException e) {
             System.out.println("Não foi possível encontrar o Employee informado");
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause());
+        } catch (ArquivoException e) {
+            System.out.println("Não foi possível encontrar o Employee informado");
+            System.out.println(e.getMessage());
+            System.out.println(e.getCause());
         }
-
     }
 
     public static void editarEmployee() {
@@ -61,21 +81,31 @@ public class UIEmployee {
         try {
             buscarNome = employeeController.buscar(id);
 
+
+        } catch (Exception e) {
+            System.out.println("Não foi possível encontrar o Employee informado");
+        }
+        Employee deletarNome;
+
+        try {
+            deletarNome = employeeController.buscar(id);
+            employeeController.apagar(id);
         } catch (Exception e) {
             System.out.println("Não foi possível encontrar o Employee informado");
         }
 
-        // Preencher dados do Employee
+
         System.out.println("Entre com o nome:");
         nome = sc.next();
         System.out.println("Entre com o sobrenome:");
         sobrenome = sc.next();
         System.out.println("Entre com o email:");
         email = sc.next();
+        Employee salvarNome;
 
-        // Salvar Employee atualizado
         try {
-            // salvarNome = employeeController.salvar(new Employee(nome, sobrenome, email));
+            salvarNome = employeeController.salvar(new Employee(nome, sobrenome, email));
+            System.out.println("Employee salvo: " + salvarNome.getId());
         } catch (Exception e) {
             System.out.println("Não foi possível atualizar o Employee");
         }
@@ -84,16 +114,16 @@ public class UIEmployee {
 
     public static void excluirEmployee() {
         System.out.println("---------- Excluir Employee ----------");
-//        EmployeeController employeeController = new EmployeeController();
+        EmployeeController employeeController = new EmployeeController();
         Scanner sc = new Scanner(System.in);
         String id;
         System.out.println("Entre com o id:");
         id = sc.next();
+        Employee excluirEmployee;
 
-        // Buscar Employee pelo id.
         try {
-            // buscarNome = employeeController.buscar(id);
-            // employeeController.apagar(id);
+            excluirEmployee = employeeController.buscar(id);
+            employeeController.apagar(id);
         } catch (Exception e) {
             System.out.println("Não foi possível encontrar o Employee informado");
         }

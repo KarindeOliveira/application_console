@@ -1,7 +1,6 @@
 package com.ciandt.feedfront.application;
 
 
-
 public class UI {
 
     public static void clearScreen() {
