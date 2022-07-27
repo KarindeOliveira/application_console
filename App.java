@@ -16,8 +16,8 @@ public class App {
             if (opcao == 1 || opcao == 2) {
                 UI.menuDetalhado(opcao);
                 opcaoDetalhe = sc.nextInt();
-                while (opcaoDetalhe != 5) {
-                    if (opcaoDetalhe > 0 && opcaoDetalhe < 6) {
+                while (opcaoDetalhe != 6) {
+                    if (opcaoDetalhe > 0 && opcaoDetalhe < 7) {
                         UI.realizarAcao(opcao, opcaoDetalhe);
                         UI.clearScreen();
                         UI.menuDetalhado(opcao);
@@ -29,7 +29,7 @@ public class App {
                 }
                 opcao = 0;
             } else {
-                if (opcaoDetalhe == 5) {
+                if (opcaoDetalhe == 6) {
                     UI.menuInicial();
                     opcaoDetalhe = 0;
                 } else  {
